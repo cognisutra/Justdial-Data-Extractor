@@ -1,0 +1,32 @@
+{
+  "manifest_version": 3,
+  "name": "JustDial Data Extractor",
+  "version": "1.0.0",
+  "description": "Extract business listings (name, phone, location, category) from JustDial search results and export to CSV.",
+  "permissions": ["activeTab", "scripting", "downloads", "storage"],
+  "host_permissions": ["*://*.justdial.com/*"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "JustDial Data Extractor",
+    "default_icon": {
+      "16": "icon.png",
+      "48": "icon.png",
+      "128": "icon.png"
+    }
+  },
+  "icons": {
+    "16": "icon.png",
+    "48": "icon.png",
+    "128": "icon.png"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*.justdial.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}

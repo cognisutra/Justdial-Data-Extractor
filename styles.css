@@ -1,0 +1,75 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  width: 340px;
+  background: #f7f8fa;
+  color: #1f2937;
+}
+
+.container { padding: 16px; }
+
+header { margin-bottom: 14px; text-align: center; }
+header h1 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #d32f2f;
+}
+.subtitle { font-size: 11px; color: #6b7280; margin-top: 2px; }
+
+.stats { margin-bottom: 14px; }
+.stat-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.stat-label { font-size: 12px; color: #6b7280; text-transform: uppercase; letter-spacing: .5px; }
+.stat-value { font-size: 22px; font-weight: 700; color: #d32f2f; }
+
+.actions { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+
+.btn {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: opacity .15s, transform .05s;
+}
+.btn:active:not(:disabled) { transform: scale(.98); }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+
+.btn-primary { background: #d32f2f; color: #fff; }
+.btn-primary:hover:not(:disabled) { background: #b71c1c; }
+
+.btn-secondary { background: #2563eb; color: #fff; }
+.btn-secondary:hover:not(:disabled) { background: #1d4ed8; }
+
+.btn-ghost {
+  background: transparent;
+  color: #6b7280;
+  border: 1px solid #e5e7eb;
+}
+.btn-ghost:hover:not(:disabled) { background: #f3f4f6; }
+
+.status {
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+.status.hidden { display: none; }
+.status.info    { background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; }
+.status.success { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
+.status.error   { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+.status.loading { background: #fffbeb; color: #92400e; border: 1px solid #fde68a; }
+
+footer { text-align: center; color: #9ca3af; }
+footer small { font-size: 10px; }

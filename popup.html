@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>JustDial Data Extractor</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>JustDial Data Extractor</h1>
+      <p class="subtitle">Scrape business listings into CSV</p>
+    </header>
+
+    <div class="stats">
+      <div class="stat-card">
+        <span class="stat-label">Records</span>
+        <span id="recordCount" class="stat-value">0</span>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button id="extractBtn" class="btn btn-primary">Extract Data</button>
+      <button id="downloadBtn" class="btn btn-secondary" disabled>Download CSV</button>
+      <button id="clearBtn" class="btn btn-ghost">Clear</button>
+    </div>
+
+    <div id="status" class="status hidden"></div>
+
+    <footer>
+      <small>Open a JustDial search page, then click Extract Data.</small>
+    </footer>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

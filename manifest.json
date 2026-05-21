@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "JustDial Data Extractor",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Extract business listings (name, phone, location, category) from JustDial search results and export to CSV.",
   "permissions": ["activeTab", "scripting", "downloads", "storage"],
   "host_permissions": ["*://*.justdial.com/*"],

@@ -9,7 +9,7 @@
   <div class="container">
     <header>
       <h1>JustDial Data Extractor</h1>
-      <p class="subtitle">Scrape business listings into CSV</p>
+      <p class="subtitle">Scrape business listings in seconds</p>
     </header>
 
     <div class="stats">
@@ -20,15 +20,50 @@
     </div>
 
     <div class="actions">
-      <button id="extractBtn" class="btn btn-primary">Extract Data</button>
-      <button id="downloadBtn" class="btn btn-secondary" disabled>Download CSV</button>
-      <button id="clearBtn" class="btn btn-ghost">Clear</button>
+      <button id="extractBtn" class="btn btn-primary">⚡ Extract Data</button>
     </div>
 
     <div id="status" class="status hidden"></div>
 
+    <!-- Preview Table -->
+    <div id="previewSection" class="preview-section hidden">
+      <div class="preview-header">
+        <span class="preview-title">Preview</span>
+        <span id="previewCount" class="preview-count"></span>
+      </div>
+      <div class="table-wrap">
+        <table id="previewTable">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Business Name</th>
+              <th>Phone</th>
+              <th>Location</th>
+              <th>Category</th>
+            </tr>
+          </thead>
+          <tbody id="previewBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Export Buttons -->
+    <div id="exportSection" class="export-section hidden">
+      <p class="export-label">Export as</p>
+      <div class="export-row">
+        <button id="downloadCSV"  class="btn btn-export">📄 CSV</button>
+        <button id="downloadJSON" class="btn btn-export">📦 JSON</button>
+        <button id="downloadTSV"  class="btn btn-export">📊 Excel/TSV</button>
+        <button id="downloadHTML" class="btn btn-export">🌐 HTML</button>
+      </div>
+      <button id="clearBtn" class="btn btn-ghost">🗑 Clear Data</button>
+    </div>
+
     <footer>
-      <small>Open a JustDial search page, then click Extract Data.</small>
+      <small>Open a JustDial search page, then click Extract.</small>
+      <div class="credit">
+        Made with ❤️ by <a href="https://cognisutra.in" target="_blank">cognisutra.in</a>
+      </div>
     </footer>
   </div>
 

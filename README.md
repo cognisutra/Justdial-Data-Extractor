@@ -31,7 +31,7 @@ Since this extension is not on the Chrome Web Store, you load it as an **unpacke
 
 ### Step 1 — Download
 
-Download the latest release ZIP from (https://justdialextractor.vercel.app/) or from the [Releases](#) section of this repo.
+Download the latest release ZIP from (https://justdialextractor.vercel.app/).
 
 ### Step 2 — Unzip
 

@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>JustDial Data Extractor — cognisutra.in</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--red:#d32f2f;--red-dark:#b71c1c;--red-glow:rgba(211,47,47,0.18);--black:#0e0e0f;--surface:#161618;--surface2:#1e1e21;--border:rgba(255,255,255,0.08);--text:#f0f0f2;--muted:#888893;--accent:#ff6b6b}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--black);color:var(--text);overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:.4}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:16px 40px;background:rgba(14,14,15,0.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:15px;color:var(--text);letter-spacing:-.3px;display:flex;align-items:center;gap:8px}
+.nav-logo span{color:var(--red)}
+.nav-badge{background:var(--red);color:#fff;font-size:9px;font-weight:700;letter-spacing:.5px;padding:2px 7px;border-radius:20px;text-transform:uppercase}
+.nav-links{display:flex;align-items:center;gap:28px}
+.nav-links a{font-size:13px;color:var(--muted);text-decoration:none;transition:color .2s;font-weight:500}
+.nav-links a:hover{color:var(--text)}
+.nav-cta{background:var(--red);color:#fff;padding:8px 20px;border-radius:6px;font-size:13px;font-weight:600;text-decoration:none;transition:background .2s,transform .1s}
+.nav-cta:hover{background:var(--red-dark);transform:translateY(-1px)}
+.hero{min-height:100vh;display:flex;align-items:center;padding:120px 40px 80px;position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse 60% 50% at 70% 50%,rgba(211,47,47,0.12) 0%,transparent 70%),radial-gradient(ellipse 40% 60% at 20% 80%,rgba(211,47,47,0.06) 0%,transparent 60%)}
+.hero-bg::after{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.025) 1px,transparent 1px);background-size:60px 60px}
+.hero-inner{max-width:1100px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 400px;gap:60px;align-items:center;position:relative;z-index:1}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(211,47,47,0.12);border:1px solid rgba(211,47,47,0.25);color:var(--accent);font-size:11px;font-weight:600;letter-spacing:.8px;padding:5px 14px;border-radius:20px;text-transform:uppercase;margin-bottom:20px}
+.hero-eyebrow::before{content:'●';font-size:7px;animation:pulse 1.8s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+h1{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(36px,5vw,60px);line-height:1.05;letter-spacing:-2px;margin-bottom:22px}
+h1 em{font-style:normal;color:var(--red);text-decoration:underline;text-decoration-color:rgba(211,47,47,0.4);text-underline-offset:6px}
+.hero-sub{font-size:16px;color:var(--muted);line-height:1.7;max-width:480px;margin-bottom:36px}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:40px}
+.btn-primary{background:var(--red);color:#fff;padding:13px 28px;border-radius:7px;font-size:14px;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all .2s;box-shadow:0 0 32px rgba(211,47,47,0.3)}
+.btn-primary:hover{background:var(--red-dark);transform:translateY(-2px);box-shadow:0 4px 40px rgba(211,47,47,0.4)}
+.btn-ghost{background:transparent;color:var(--text);padding:13px 28px;border-radius:7px;font-size:14px;font-weight:600;text-decoration:none;border:1px solid var(--border);display:inline-flex;align-items:center;gap:8px;transition:all .2s}
+.btn-ghost:hover{border-color:rgba(255,255,255,0.2);background:var(--surface)}
+.hero-stats{display:flex;gap:32px}
+.hero-stat{display:flex;flex-direction:column;gap:2px}
+.hero-stat-n{font-family:'Syne',sans-serif;font-weight:800;font-size:28px;color:var(--text)}
+.hero-stat-l{font-size:12px;color:var(--muted)}
+.ext-mock{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,0.6),0 0 0 1px rgba(255,255,255,0.04);animation:float 4s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.ext-mock-bar{background:var(--surface2);padding:10px 14px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border)}
+.ext-mock-dots{display:flex;gap:5px}
+.ext-mock-dots span{width:10px;height:10px;border-radius:50%;display:block}
+.dot-r{background:#ff5f57}.dot-y{background:#febc2e}.dot-g{background:#28c840}
+.ext-mock-title{font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;margin-left:6px}
+.ext-mock-body{padding:16px}
+.ext-mock-header{text-align:center;margin-bottom:12px}
+.ext-mock-header h3{font-size:13px;font-weight:700;color:var(--red);font-family:'Syne',sans-serif}
+.ext-mock-header p{font-size:10px;color:var(--muted);margin-top:2px}
+.ext-stat{background:var(--black);border:1px solid var(--border);border-radius:8px;padding:10px;display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.ext-stat-l{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.ext-stat-v{font-size:20px;font-weight:800;color:var(--red);font-family:'Syne',sans-serif}
+.ext-btn-ex{width:100%;padding:9px;background:var(--red);color:#fff;border:none;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;margin-bottom:8px;font-family:'DM Sans',sans-serif}
+.ext-exports{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:5px;margin-bottom:10px}
+.ext-exp-btn{background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:7px 4px;font-size:10px;font-weight:600;color:var(--text);cursor:pointer;text-align:center;font-family:'DM Sans',sans-serif}
+.ext-table-mini{width:100%;font-size:9.5px;border-collapse:collapse}
+.ext-table-mini th{background:rgba(211,47,47,0.15);color:var(--muted);padding:4px 6px;text-align:left;font-weight:600}
+.ext-table-mini td{padding:4px 6px;border-bottom:1px solid var(--border);color:var(--text)}
+.ext-table-mini tr:last-child td{border-bottom:none}
+.ext-footer-credit{text-align:center;margin-top:10px;font-size:9px;color:var(--muted)}
+.ext-footer-credit a{color:var(--red);text-decoration:none;font-weight:700}
+section{padding:80px 40px}
+.section-inner{max-width:1100px;margin:0 auto}
+.section-tag{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--red);margin-bottom:10px}
+.section-title{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(28px,4vw,42px);letter-spacing:-1.5px;margin-bottom:14px;line-height:1.1}
+.section-sub{font-size:15px;color:var(--muted);max-width:560px;line-height:1.7}
+#features{background:var(--surface)}
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-top:50px}
+.feat-card{background:var(--surface);padding:32px 28px;transition:background .2s}
+.feat-card:hover{background:var(--surface2)}
+.feat-icon{width:44px;height:44px;border-radius:10px;background:rgba(211,47,47,0.12);border:1px solid rgba(211,47,47,0.2);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:16px}
+.feat-title{font-size:15px;font-weight:700;margin-bottom:8px;font-family:'Syne',sans-serif}
+.feat-desc{font-size:13px;color:var(--muted);line-height:1.65}
+#howto{background:var(--black)}
+.steps-wrap{margin-top:50px;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
+.steps-list{display:flex;flex-direction:column;gap:0}
+.step{display:flex;gap:16px;padding:24px 0;border-bottom:1px solid var(--border);position:relative}
+.step:last-child{border-bottom:none}
+.step-num{width:36px;height:36px;border-radius:50%;background:rgba(211,47,47,0.12);border:1px solid rgba(211,47,47,0.25);color:var(--red);font-family:'Syne',sans-serif;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.step-content h4{font-size:15px;font-weight:700;margin-bottom:6px;font-family:'Syne',sans-serif}
+.step-content p{font-size:13px;color:var(--muted);line-height:1.65}
+.step-content code{font-family:'DM Mono',monospace;background:rgba(255,255,255,0.06);padding:2px 7px;border-radius:4px;font-size:12px;color:var(--accent)}
+.install-tip{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:28px}
+.install-tip h4{font-size:15px;font-weight:700;margin-bottom:16px;font-family:'Syne',sans-serif}
+.tip-item{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--border)}
+.tip-item:last-child{border-bottom:none}
+.tip-icon{font-size:16px;flex-shrink:0;margin-top:1px}
+.tip-text{font-size:12px;color:var(--muted);line-height:1.6}
+.tip-text strong{color:var(--text)}
+#exports{background:var(--surface)}
+.exports-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:50px}
+.export-card{background:var(--black);border:1px solid var(--border);border-radius:10px;padding:24px 20px;text-align:center;transition:border-color .2s,transform .2s}
+.export-card:hover{border-color:rgba(211,47,47,0.4);transform:translateY(-4px)}
+.export-emoji{font-size:32px;margin-bottom:12px;display:block}
+.export-name{font-family:'Syne',sans-serif;font-weight:800;font-size:16px;margin-bottom:6px}
+.export-ext{font-family:'DM Mono',monospace;font-size:12px;color:var(--red);background:rgba(211,47,47,0.1);padding:2px 8px;border-radius:4px;display:inline-block;margin-bottom:10px}
+.export-desc{font-size:12px;color:var(--muted);line-height:1.6}
+#faq{background:var(--black)}
+.faq-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:50px}
+.faq-item{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:24px}
+.faq-q{font-size:14px;font-weight:700;margin-bottom:8px;font-family:'Syne',sans-serif}
+.faq-a{font-size:13px;color:var(--muted);line-height:1.65}
+#cta{background:var(--surface);border-top:1px solid var(--border);text-align:center;padding:80px 40px;position:relative;overflow:hidden}
+#cta::before{content:'';position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:600px;height:300px;background:radial-gradient(ellipse,rgba(211,47,47,0.15) 0%,transparent 70%)}
+#cta .section-inner{position:relative;z-index:1}
+#cta .section-title{font-size:clamp(28px,4vw,48px)}
+#cta p{font-size:16px;color:var(--muted);margin:16px auto 36px;max-width:480px;line-height:1.7}
+footer{background:var(--black);border-top:1px solid var(--border);padding:24px 40px;display:flex;justify-content:space-between;align-items:center}
+.footer-brand{font-size:13px;color:var(--muted)}
+.footer-brand a{color:var(--red);text-decoration:none;font-weight:700}
+.footer-right{font-size:12px;color:var(--muted)}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+@media(max-width:900px){.hero-inner{grid-template-columns:1fr;gap:40px}.ext-mock{max-width:360px;margin:0 auto}.features-grid{grid-template-columns:1fr 1fr}.steps-wrap{grid-template-columns:1fr}.exports-grid{grid-template-columns:1fr 1fr}.faq-grid{grid-template-columns:1fr}nav{padding:14px 20px}.nav-links{display:none}.hero{padding:100px 20px 60px}section{padding:60px 20px}}
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-logo"><span>Cognisutra</span> JD Extractor<span class="nav-badge">v2.0</span></div>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#howto">Install</a>
+    <a href="#exports">Exports</a>
+    <a href="#faq">FAQ</a>
+  </div>
+  <a href="#cta" class="nav-cta">⬇ Download Free</a>
+</nav>
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="hero-eyebrow">Chrome Extension · Free</div>
+      <h1>Extract JustDial<br>listings <em>instantly.</em></h1>
+      <p class="hero-sub">Scrape business names, phone numbers, locations and categories from any JustDial search page. Export to CSV, JSON, Excel or HTML — in one click.</p>
+      <div class="hero-btns">
+        <a href="#cta" class="btn-primary">⬇ Download Extension</a>
+        <a href="#howto" class="btn-ghost">📖 How to Install</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat"><span class="hero-stat-n">4</span><span class="hero-stat-l">Export formats</span></div>
+        <div class="hero-stat"><span class="hero-stat-n">0₹</span><span class="hero-stat-l">Free forever</span></div>
+        <div class="hero-stat"><span class="hero-stat-n">1-click</span><span class="hero-stat-l">Extraction</span></div>
+      </div>
+    </div>
+    <div class="ext-mock">
+      <div class="ext-mock-bar">
+        <div class="ext-mock-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
+        <span class="ext-mock-title">JustDial Data Extractor</span>
+      </div>
+      <div class="ext-mock-body">
+        <div class="ext-mock-header"><h3>JustDial Data Extractor</h3><p>Scrape business listings in seconds</p></div>
+        <div class="ext-stat"><span class="ext-stat-l">Records</span><span class="ext-stat-v" id="mockCount">0</span></div>
+        <button class="ext-btn-ex" id="mockExtract">⚡ Extract Data</button>
+        <div class="ext-exports">
+          <div class="ext-exp-btn">📄 CSV</div>
+          <div class="ext-exp-btn">📦 JSON</div>
+          <div class="ext-exp-btn">📊 Excel</div>
+          <div class="ext-exp-btn">🌐 HTML</div>
+        </div>
+        <table class="ext-table-mini" id="mockTable" style="display:none">
+          <thead><tr><th>#</th><th>Name</th><th>Phone</th><th>City</th></tr></thead>
+          <tbody id="mockRows"></tbody>
+        </table>
+        <div class="ext-footer-credit">Made with ❤️ by <a href="https://cognisutra.in" target="_blank">cognisutra.in</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+<section id="features">
+  <div class="section-inner">
+    <div class="section-tag">Features</div>
+    <h2 class="section-title">Everything you need,<br>nothing you don't.</h2>
+    <p class="section-sub">Built lean and fast — no accounts, no API keys, no subscriptions. Just install and go.</p>
+    <div class="features-grid reveal">
+      <div class="feat-card"><div class="feat-icon">⚡</div><div class="feat-title">One-Click Extraction</div><p class="feat-desc">Hit Extract Data and the extension auto-scrolls the page, loads lazy content, and scrapes every visible listing — deduplicated.</p></div>
+      <div class="feat-card"><div class="feat-icon">👁</div><div class="feat-title">Instant Preview Table</div><p class="feat-desc">See your extracted records in a live scrollable table inside the popup before you download anything. Know what you're getting.</p></div>
+      <div class="feat-card"><div class="feat-icon">📦</div><div class="feat-title">4 Export Formats</div><p class="feat-desc">CSV, JSON, Excel-ready TSV and a formatted HTML report — all with a single click. Use the data anywhere you need it.</p></div>
+      <div class="feat-card"><div class="feat-icon">🧹</div><div class="feat-title">Smart Deduplication</div><p class="feat-desc">Automatically removes duplicate listings so you get a clean, unique dataset every time — no manual cleanup needed.</p></div>
+      <div class="feat-card"><div class="feat-icon">🔒</div><div class="feat-title">100% Local & Private</div><p class="feat-desc">All data stays on your device. No servers, no accounts, no tracking. Your scraped data never leaves Chrome's local storage.</p></div>
+      <div class="feat-card"><div class="feat-icon">🆓</div><div class="feat-title">Free Forever</div><p class="feat-desc">No paywalls, no usage limits, no subscriptions. Free to use for businesses, researchers and students alike.</p></div>
+    </div>
+  </div>
+</section>
+<section id="howto">
+  <div class="section-inner">
+    <div class="section-tag">Setup Guide</div>
+    <h2 class="section-title">Install in Chrome<br>in 60 seconds.</h2>
+    <p class="section-sub">No Chrome Web Store needed — load it directly as an unpacked extension in Developer Mode.</p>
+    <div class="steps-wrap reveal">
+      <div class="steps-list">
+        <div class="step"><div class="step-num">1</div><div class="step-content"><h4>Download the Extension</h4><p>Click the Download button and save <code>justdial-extractor-v2.zip</code> to your computer.</p></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-content"><h4>Unzip the File</h4><p>Right-click the ZIP → <strong>Extract All</strong> (Windows) or double-click (Mac). You'll get a folder called <code>justdial-extractor-v2</code>.</p></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-content"><h4>Open Chrome Extensions</h4><p>In Chrome, go to <code>chrome://extensions</code> — or Menu → More Tools → Extensions.</p></div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-content"><h4>Enable Developer Mode</h4><p>Toggle <strong>Developer mode</strong> ON using the switch in the top-right corner of the extensions page.</p></div></div>
+        <div class="step"><div class="step-num">5</div><div class="step-content"><h4>Load Unpacked</h4><p>Click <strong>Load unpacked</strong> → select the extracted <code>justdial-extractor-v2</code> folder → click Select Folder.</p></div></div>
+        <div class="step"><div class="step-num">6</div><div class="step-content"><h4>Start Extracting!</h4><p>Open any JustDial search page, click the extension icon in your toolbar, and hit <strong>⚡ Extract Data</strong>.</p></div></div>
+      </div>
+      <div class="install-tip">
+        <h4>💡 Tips & Troubleshooting</h4>
+        <div class="tip-item"><span class="tip-icon">📌</span><p class="tip-text"><strong>Pin the extension</strong> — Click the puzzle icon 🧩 in Chrome's toolbar and pin JustDial Extractor for quick access.</p></div>
+        <div class="tip-item"><span class="tip-icon">🔄</span><p class="tip-text"><strong>Page must be loaded</strong> — Make sure JustDial search results are fully visible before clicking Extract.</p></div>
+        <div class="tip-item"><span class="tip-icon">📜</span><p class="tip-text"><strong>Scroll first</strong> — The extractor auto-scrolls, but if results seem incomplete, manually scroll down before extracting.</p></div>
+        <div class="tip-item"><span class="tip-icon">⚠️</span><p class="tip-text"><strong>"Developer Mode" warning</strong> — Chrome may warn about developer extensions on restart. Dismiss it — this is normal for unpacked extensions.</p></div>
+        <div class="tip-item"><span class="tip-icon">🗑</span><p class="tip-text"><strong>Clear between searches</strong> — Use the Clear button to reset data before extracting a new search category or city.</p></div>
+        <div class="tip-item"><span class="tip-icon">🌐</span><p class="tip-text"><strong>Works on all JustDial searches</strong> — Restaurants, doctors, hotels, shops — any search results page on justdial.com.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+<section id="exports">
+  <div class="section-inner">
+    <div class="section-tag">Export Formats</div>
+    <h2 class="section-title">Your data, your format.</h2>
+    <p class="section-sub">Pick the format that fits your workflow — spreadsheet, code, or a shareable report.</p>
+    <div class="exports-grid reveal">
+      <div class="export-card"><span class="export-emoji">📄</span><div class="export-name">CSV</div><div class="export-ext">.csv</div><p class="export-desc">Universal format. Opens in Google Sheets, Excel, LibreOffice. Best for general use and bulk imports.</p></div>
+      <div class="export-card"><span class="export-emoji">📦</span><div class="export-name">JSON</div><div class="export-ext">.json</div><p class="export-desc">Structured data for developers. Feed directly into scripts, APIs, databases or automation pipelines.</p></div>
+      <div class="export-card"><span class="export-emoji">📊</span><div class="export-name">Excel / TSV</div><div class="export-ext">.tsv</div><p class="export-desc">Tab-separated values. Open directly in Microsoft Excel with perfect column formatting.</p></div>
+      <div class="export-card"><span class="export-emoji">🌐</span><div class="export-name">HTML Report</div><div class="export-ext">.html</div><p class="export-desc">Styled, shareable report with a formatted table. Send to clients or teammates — opens in any browser.</p></div>
+    </div>
+  </div>
+</section>
+<section id="faq">
+  <div class="section-inner">
+    <div class="section-tag">FAQ</div>
+    <h2 class="section-title">Common questions.</h2>
+    <div class="faq-grid reveal">
+      <div class="faq-item"><div class="faq-q">Is this extension free?</div><p class="faq-a">Yes, completely free. No subscriptions, no usage limits, no hidden charges. Download it, use it forever.</p></div>
+      <div class="faq-item"><div class="faq-q">Does it work on all JustDial pages?</div><p class="faq-a">It works on any JustDial search results page — restaurants, hotels, doctors, shops, services — anything that shows a list of businesses.</p></div>
+      <div class="faq-item"><div class="faq-q">Why do I need Developer Mode?</div><p class="faq-a">Since this isn't on the Chrome Web Store, Chrome requires Developer Mode to load local extensions. It's completely safe and a standard process.</p></div>
+      <div class="faq-item"><div class="faq-q">Is my data sent anywhere?</div><p class="faq-a">No. Everything happens locally in your browser. Your extracted data is stored in Chrome's local storage and never leaves your device.</p></div>
+      <div class="faq-item"><div class="faq-q">What data gets extracted?</div><p class="faq-a">Business name, phone number, location/area, and business category — exactly as shown on the JustDial search results page.</p></div>
+      <div class="faq-item"><div class="faq-q">The extraction returned 0 results — why?</div><p class="faq-a">JustDial occasionally updates their page structure. Try refreshing the JustDial page and extracting again. If the issue persists, contact cognisutra.in for an update.</p></div>
+    </div>
+  </div>
+</section>
+<section id="cta">
+  <div class="section-inner">
+    <div class="section-tag">Get Started</div>
+    <h2 class="section-title">Start extracting<br>in 60 seconds.</h2>
+    <p>Free Chrome extension. No account needed. Works on any JustDial search page.</p>
+    <!-- UPDATE THIS HREF to your actual download link -->
+    <a href="justdial-extractor-v2.zip" download class="btn-primary" style="display:inline-flex;margin:0 auto">⬇ Download Free — v2.0</a>
+  </div>
+</section>
+<footer>
+  <div class="footer-brand">Made with ❤️ by <a href="https://cognisutra.in" target="_blank">cognisutra.in</a> — Web Development &amp; Tools</div>
+  <div class="footer-right">JustDial Data Extractor v2.0 · Free Chrome Extension</div>
+</footer>
+<script>
+const reveals=document.querySelectorAll('.reveal');
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')})},{threshold:0.12});
+reveals.forEach(r=>obs.observe(r));
+const mockData=[{n:"Kailash Hotel",p:"9876543210",c:"Mumbai"},{n:"Green Stays",p:"9123456789",c:"Pune"},{n:"Star Residency",p:"9988776655",c:"Delhi"}];
+let extracted=false;
+document.getElementById('mockExtract').addEventListener('click',function(){
+  if(extracted)return;extracted=true;
+  this.textContent='⏳ Extracting…';
+  setTimeout(()=>{
+    this.textContent='✅ Done!';
+    document.getElementById('mockCount').textContent='3';
+    const tbody=document.getElementById('mockRows');tbody.innerHTML='';
+    mockData.forEach((r,i)=>{
+      const tr=document.createElement('tr');
+      tr.innerHTML=`<td>${i+1}</td><td>${r.n}</td><td>${r.p}</td><td>${r.c}</td>`;
+      tr.style.opacity='0';tbody.appendChild(tr);
+      setTimeout(()=>{tr.style.transition='opacity .3s';tr.style.opacity='1'},i*150);
+    });
+    document.getElementById('mockTable').style.display='table';
+    setTimeout(()=>{extracted=false;this.textContent='⚡ Extract Data'},5000);
+  },1800);
+});
+</script>
+</body>
+</html>
